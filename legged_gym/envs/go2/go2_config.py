@@ -124,22 +124,22 @@ class Go2RoughCfg( LeggedRobotCfg ):
         max_contact_force = 100. # forces above this value are penalized
         class scales( LeggedRobotCfg.rewards.scales ):
             termination = -0.0
-            tracking_lin_vel = 2.0
-            tracking_ang_vel = 0.5
+            tracking_lin_vel = 3.0
+            tracking_ang_vel = 1
             lin_vel_z = -0.01
-            ang_vel_xy = -0.0001
+            ang_vel_xy = -0.001
             orientation = -0.1
             torques = -0.0002
             dof_vel = -0.
             dof_acc = -0
-            base_height = -0.01 
+            base_height = -0.1 
             feet_air_time =  1
             collision = -1.
             feet_stumble = -0.0 
             action_rate = -0.005
             stand_still = -0.
             dof_pos_limits =-10
-            joint_pos = -0.01
+            joint_pos = -0.1
 
 class Go2RoughCfgPPO( LeggedRobotCfgPPO ):
     class algorithm( LeggedRobotCfgPPO.algorithm ):

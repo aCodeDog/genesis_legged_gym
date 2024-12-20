@@ -13,7 +13,7 @@ This repository provides the Genesis environment used to legged robots.
 3. Install rsl_rl (PPO implementation)
    - Clone https://github.com/leggedrobotics/rsl_rl
    -  `cd rsl_rl && git checkout v1.0.2 && pip install -e .` 
-4. Install this genesis veersion of legged_gym
+4. Install this genesis version of legged_gym
     - Clone this repository
    - `cd legged_gym && pip install -e .`
 

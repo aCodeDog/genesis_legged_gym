@@ -126,7 +126,6 @@ class LeggedRobot(BaseTask):
         self.last_root_vel[:] = self.root_states[:, 7:13]
 
 
-
     def post_physics_step(self):
         """ check terminations, compute observations and rewards
             calls self._post_physics_step_callback() for common computations 
@@ -489,10 +488,10 @@ class LeggedRobot(BaseTask):
             -1.0, 1.0, (len( env_ids), 2), self.device
         )
         self.base_quat[env_ids] = self.base_init_quat.reshape(1, -1)
-        base_euler = torch_rand_float(
-            -0.1, 0.1, (len( env_ids), 3), self.device
-        )
-        base_euler[:, 2:3] = torch_rand_float(0.0, 3.14, (len( env_ids),1), self.device)
+        # base_euler = torch_rand_float(
+        #     -0.1, 0.1, (len( env_ids), 3), self.device
+        # )
+        # base_euler[:, 2:3] = torch_rand_float(0.0, 3.14, (len( env_ids),1), self.device)
         # self.base_quat[env_ids] = quat_mul(
         #     quat_from_euler_xyz(base_euler[:,0],base_euler[:,1],base_euler[:,2]),
         #     self.base_quat[ env_ids],
@@ -507,11 +506,7 @@ class LeggedRobot(BaseTask):
         )
         self.robot.zero_all_dofs_velocity( env_ids)
 
-        # update projected gravity
-        inv_base_quat = inv_quat(self.base_quat)
-        self.projected_gravity = transform_by_quat(
-            self.global_gravity, inv_base_quat
-        )
+
 
     def _push_robots(self):
         """ Random pushes the robots. Emulates an impulse by setting a randomized base velocity. 
@@ -744,13 +739,13 @@ class LeggedRobot(BaseTask):
             ),
         )
         self.scene.build(n_envs=self.num_envs)
-        self.dof_names_auto=[]
+        #self.dof_names_auto=[]
         if self.cfg.init_state.dof_names is not None:
             self.motor_dofs = [self.robot.get_joint(name).dof_idx_local for name in self.cfg.init_state.dof_names]
         else:
             raise ValueError("DOF names not defined in the config file")
 
-        print("####Dof names auto 2: ", self.dof_names_auto)
+        #print("####Dof names auto 2: ", self.dof_names_auto)
         self.num_bodies = self.robot.n_links
         self.dof_names=[]
         self.joints_obj = self.robot.joints
