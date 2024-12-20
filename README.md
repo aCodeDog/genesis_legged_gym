@@ -6,16 +6,14 @@ This repository provides the Genesis environment used to legged robots.
 
 ### Installation ###
 1. Create a new python virtual env with python >= 3.9
-2. Install pytorch 1.10 with cuda-11.3:
-    - `pip3 install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html`
-3. Install genesis
+2. Install genesis
 
    - `pip install genesis-world`
 
-4. Install rsl_rl (PPO implementation)
+3. Install rsl_rl (PPO implementation)
    - Clone https://github.com/leggedrobotics/rsl_rl
    -  `cd rsl_rl && git checkout v1.0.2 && pip install -e .` 
-5. Install this genesis veersion of legged_gym
+4. Install this genesis veersion of legged_gym
     - Clone this repository
    - `cd legged_gym && pip install -e .`
 
