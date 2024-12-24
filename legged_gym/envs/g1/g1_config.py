@@ -37,6 +37,17 @@ class G1RoughCfg( LeggedRobotCfg ):
         num_observations = 48
         num_actions = 12
       
+    class commands(LeggedRobotCfg.commands):
+        curriculum = False
+        max_curriculum = 1.
+        num_commands = 4 # default: lin_vel_x, lin_vel_y, ang_vel_yaw, heading (in heading mode ang_vel_yaw is recomputed from heading error)
+        resampling_time = 10. # time before command are changed[s]
+        heading_command = False # if true: compute ang vel command from heading error
+        class ranges(LeggedRobotCfg.commands.ranges):
+            lin_vel_x = [-1., 1.] # min max [m/s]
+            lin_vel_y = [-0.0, 0.0]   # min max [m/s]
+            ang_vel_yaw = [-0, 0]    # min max [rad/s]
+            heading = [-3.14, 3.14]
 
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
@@ -72,14 +83,14 @@ class G1RoughCfg( LeggedRobotCfg ):
         soft_dof_pos_limit = 0.9
         base_height_target = 0.728
         class scales( LeggedRobotCfg.rewards.scales ):
-            tracking_lin_vel = 2.0
+            tracking_lin_vel = 1.0
             tracking_ang_vel = 0.5
             lin_vel_z = -2.0
             ang_vel_xy = -0.01
             orientation = -2.0
             base_height = -10
-            dof_acc = -2.5e-8
-            feet_air_time = 1.0
+            dof_acc = -2.5e-7
+            feet_air_time = 3.0
             collision = 0.0
             action_rate = -0.01
             # torques = -0.0001
@@ -90,7 +101,7 @@ class G1RoughCfgPPO( LeggedRobotCfgPPO ):
     class policy:
         init_noise_std = 0.8
     class algorithm( LeggedRobotCfgPPO.algorithm ):
-        entropy_coef = 0.01
+        entropy_coef = 0.001
     class runner( LeggedRobotCfgPPO.runner ):
         run_name = ''
         experiment_name = 'g1'

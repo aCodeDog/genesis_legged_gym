@@ -1002,7 +1002,14 @@ class LeggedRobot(BaseTask):
         rew_airTime *= torch.norm(self.commands[:, :2], dim=1) > 0.1 #no reward for zero command
         self.feet_air_time *= ~contact_filt
         return rew_airTime
-    
+    def _reward_no_fly(self):
+        contacts = self.contact_forces[:, self.feet_indices, 2] > 0.1
+        single_contact = torch.sum(1. * contacts, dim=1) == 1
+        return 1. * single_contact
+    def _reward_feet_contact_forces(self):
+        # penalize high contact forces
+        return torch.sum((torch.norm(self.contact_forces[:, self.feet_indices, :],
+                                     dim=-1) - self.cfg.rewards.max_contact_force).clip(min=0.), dim=1)
     def _reward_stumble(self):
         # Penalize feet hitting vertical surfaces
         raise NotImplementedError("Stumble reward not yet implemented")
@@ -1016,8 +1023,15 @@ class LeggedRobot(BaseTask):
     def _reward_joint_pos(self):
         # Penalize motion at zero commands
         return torch.sum(torch.abs(self.dof_pos - self.default_dof_pos), dim=1)
+    def _reward_feet_distance(self):
+        reward = 0
+        for i in range(self.feet_state.shape[1] - 1):
+            for j in range(i + 1, self.feet_state.shape[1]):
+                feet_distance = torch.norm(
+                    self.feet_state[:, i, :2] - self.feet_state[:, j, :2], dim=-1
+                )
+            reward += torch.clip(self.cfg.rewards.min_feet_distance - feet_distance, 0, 1)
+        return reward
 
-    def _reward_feet_contact_forces(self):
-        # penalize high contact forces
-        raise NotImplementedError("feet_contact_forces reward not yet implemented")
-        #return torch.sum((torch.norm(self.contact_forces[:, self.feet_indices, :], dim=-1) -  self.cfg.rewards.max_contact_force).clip(min=0.), dim=1)
+    def _reward_survival(self):
+        return (~self.reset_buf).float() * self.dt
