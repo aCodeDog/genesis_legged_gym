@@ -106,7 +106,7 @@ class PointFootRoughCfg(BaseConfig):
         import os
         import sys
         robot_type = os.getenv("ROBOT_TYPE")
-
+        robot_type ='PF_P441A'
         # Check if the ROBOT_TYPE environment variable is set, otherwise exit with an error
         if not robot_type:
             print("Error: Please set the ROBOT_TYPE using 'export ROBOT_TYPE=<robot_type>'.")
